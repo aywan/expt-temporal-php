@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * This file is part of Spiral package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+use App\App;
+
+//
+// If you forgot to configure some of this in your php.ini file,
+// then don't worry, we will set the standard environment
+// settings for you.
+//
+
+mb_internal_encoding('UTF-8');
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 'stderr');
+
+define('ROOT_DIR', dirname(__DIR__));
+
+//
+// Register Composer's auto loader.
+//
+require ROOT_DIR . '/vendor/autoload.php';
+
+
+//
+// Initialize shared container, bindings, directories and etc.
+//
+$app = App::init([
+    'root' => ROOT_DIR,
+    'app' => ROOT_DIR . '/src',
+    'runtime' => '/runtime',
+    'cache' => '/runtime/cache'
+]);
+
+if ($app !== null) {
+    $app->serve();
+}

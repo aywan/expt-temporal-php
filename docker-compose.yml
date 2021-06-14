@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  php-cli:
+    environment:
+      USER_ID: ${USER_ID:-}
+      GROUP_ID: ${GROUP_ID:-}
+    volumes:
+      - ./app:/app
+      - ./runtime/php-cli:/runtime
+    build:
+      context: docker/php
+      target: dev
