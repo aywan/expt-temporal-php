@@ -1,0 +1,78 @@
+rpc:
+  listen: tcp://127.0.0.1:6001
+
+server:
+  command: "php bin/worker.php"
+
+# Logging settings (docs: https://roadrunner.dev/docs/beep-beep-logging)
+logs:
+  mode: development
+  level: debug
+
+# Workflow and activity mesh service.
+temporal:
+  # Address of temporal server.
+  address: temporal:7233
+
+  # Activities pool settings.
+  activities:
+    # How many worker processes will be started. Zero (or nothing) means the number of logical CPUs.
+    #
+    # Default: 0
+    num_workers: 0
+
+    # Maximal count of worker executions. Zero (or nothing) means no limit.
+    #
+    # Default: 0
+    max_jobs: 64
+
+    # Timeout for worker allocation. Zero means no limit.
+    #
+    # Default: 60s
+    allocate_timeout: 60s
+
+    # Timeout for worker destroying before process killing. Zero means no limit.
+    #
+    # Default: 60s
+    destroy_timeout: 60s
+
+    # Supervisor is used to control http workers (previous name was "limit", docs:
+    # https://roadrunner.dev/docs/php-limit). "Soft" limits will not interrupt current request processing. "Hard"
+    # limit on the contrary - interrupts the execution of the request.
+    supervisor:
+      # How often to check the state of the workers.
+      #
+      # Default: 1s
+      watch_tick: 1s
+
+      # Maximum time worker is allowed to live (soft limit). Zero means no limit.
+      #
+      # Default: 0s
+      ttl: 0s
+
+      # How long worker can spend in IDLE mode after first using (soft limit). Zero means no limit.
+      #
+      # Default: 0s
+      idle_ttl: 10s
+
+      # Maximal worker memory usage in megabytes (soft limit). Zero means no limit.
+      #
+      # Default: 0
+      max_worker_memory: 128
+
+      # Maximal job lifetime (hard limit). Zero means no limit.
+      #
+      # Default: 0s
+      exec_ttl: 60s
+
+  # Internal temporal communication protocol, can be "proto" or "json".
+  #
+  # Default: "proto"
+  codec: proto
+
+  # Debugging level (only for "json" codec). Set 0 for nothing, 1 for "normal", and 2 for colorized messages.
+  #
+  # Default: 1
+  debug_level: 2
+
+

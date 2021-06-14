@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Bootloader\TemporalBootloader;
 use Spiral\Bootloader as Framework;
 use Spiral\Framework\Kernel;
 
@@ -15,5 +16,6 @@ class App extends Kernel
      */
     protected const LOAD = [
         Framework\CommandBootloader::class,
+        TemporalBootloader::class,
     ];
 }

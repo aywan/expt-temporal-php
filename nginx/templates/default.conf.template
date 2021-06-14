@@ -1,0 +1,44 @@
+client_max_body_size 256m;
+server_names_hash_bucket_size 128;
+
+# Connection header for websockets
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+upstream temporal-web-upstream {
+    server temporal-web:8088;
+}
+
+server {
+    listen 80 default_server;
+
+    access_log off;
+    error_log off;
+
+    location / {
+        add_header Content-Type text/plain;
+        return 200 'OK';
+    }
+}
+
+# Log files
+server {
+    listen 80;
+    server_name web-${DOMAIN};
+
+    access_log /dev/stdout;
+    error_log /dev/stderr;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Port $server_port;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    location / {
+        proxy_pass http://temporal-web-upstream;
+    }
+}

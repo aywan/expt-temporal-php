@@ -3,6 +3,7 @@
 # confs
 USER_ID?=$(shell id -u)
 GROUP_ID?=$(shell id -g)
+DOMAIN=temporal.docker
 
 # aliases
 DC?=docker-compose
@@ -15,8 +16,16 @@ build:
 
 .PHONY: up
 up:
-	${DC} up -d
+	${DC} up -d --remove-orphans
+
+.PHONY: down
+down:
+	${DC} down --remove-orphans
 
 .PHONY: php-shell
 php-shell:
 	${DC} run --rm php-cli bash
+
+.PHONY: rr-reload
+rr-reload:
+	${DC} exec rr ./rr reset

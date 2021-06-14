@@ -11,11 +11,14 @@
     ],
     "require": {
         "php": "^8.0",
-        "spiral/framework": "^2.7"
+        "spiral/framework": "^2.7",
+        "spiral/roadrunner": "^2.3",
+        "temporal/sdk": "^1.0"
     }
     ,
     "require-dev": {
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "spiral/scaffolder": "^2.8"
     },
     "autoload": {
         "psr-4": {

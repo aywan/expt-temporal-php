@@ -1,7 +1,10 @@
 #
 # base image
 #
-FROM php:8.0-cli-alpine AS base
+FROM php:8.0.7-cli-alpine3.13 AS base
+
+# https://pecl.php.net/package/grpc
+ARG GRPC_VER=1.38.0
 
 RUN apk add --no-cache \
         bash \
@@ -9,16 +12,23 @@ RUN apk add --no-cache \
         coreutils \
         unzip \
         libpq \
+        zlib \
+        libstdc++ \
     && docker-php-source extract \
     && apk add --no-cache --update --virtual .phpize-deps ${PHPIZE_DEPS} \
     && apk add --no-cache --update --virtual .dev-deps \
         postgresql-dev \
+        zlib-dev \
+        linux-headers \
     \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-configure pcntl --enable-pcntl \
     && docker-php-ext-install \
         pdo_pgsql \
         pcntl \
+        sockets \
+    \
+    && pecl install grpc-${GRPC_VER} && docker-php-ext-enable grpc \
     \
     && apk del .dev-deps \
     && apk del .phpize-deps \
